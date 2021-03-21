@@ -5,7 +5,6 @@ import { RouteReuseStrategy, RouterModule } from '@angular/router';
 import { AuthenticationService } from '@app/core/authentication/authentication.service';
 import { ErrorHandlerInterceptor } from '@app/core/http/error-handler.interceptor';
 import { HttpService } from '@app/core/http/http.service';
-import { LocalStorageService } from '@app/core/local-storage.service';
 import { UtilService } from '@app/core/service/util.service';
 
 import { AuthenticationGuard } from './authentication/authentication.guard';
@@ -24,7 +23,6 @@ import { ErrorMessageService } from './service/error-message.service';
     providers: [
         AuthenticationGuard,
         AuthenticationService,
-        LocalStorageService,
         ErrorHandlerInterceptor,
         ApiPrefixInterceptor,
         UtilService,

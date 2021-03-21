@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Params, Router, RouterEvent } from '@angular/router';
-import { LocalStorageService } from '@app/core/local-storage.service';
 import _ from 'lodash';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -24,9 +23,8 @@ export class AuthenticationService {
     private httpClient: HttpClient,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private localStorageService: LocalStorageService,
   ) {
-    const savedCredentials = this.localStorageService.getItem(CONSTANT.credentialsKey);
+    const savedCredentials = localStorage.getItem(CONSTANT.credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
       this.setCredentials(this._credentials);
@@ -127,7 +125,7 @@ export class AuthenticationService {
   private setCredentials(credentials?: any) {
     this._credentials = credentials || null;
     if (credentials) {
-      this.localStorageService.setItem(
+      localStorage.setItem(
         CONSTANT.credentialsKey,
         JSON.stringify(credentials)
       );
@@ -137,7 +135,7 @@ export class AuthenticationService {
       for (const key in local) {
         if (local.hasOwnProperty(key)) {
           const element = local[key];
-          this.localStorageService.clearItem(element);
+          localStorage.clearItem(element);
         }
       }
     }

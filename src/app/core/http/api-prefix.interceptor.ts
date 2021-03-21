@@ -15,16 +15,10 @@ export class ApiPrefixInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (request && request.body && request.body.download === 'YES') {
+    if (request.url.charAt(0) === '/') {
       request = request.clone({
-        url: environment.serverBaseUrl + request.url
+        url: environment.serverUrl + request.url
       });
-    } else {
-      if (request.url.charAt(0) === '/') {
-        request = request.clone({
-          url: environment.serverUrl + request.url
-        });
-      }
     }
     if (this.authenticationService.isAuthenticated()) {
       request = request.clone({

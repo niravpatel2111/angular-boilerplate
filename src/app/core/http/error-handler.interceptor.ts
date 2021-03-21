@@ -1,7 +1,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '@app/core/local-storage.service';
 import { ErrorMessageService } from '@app/core/service/error-message.service';
 import { UtilService } from '@app/core/service/util.service';
 import { environment } from '@env/environment';
@@ -19,7 +18,6 @@ import { CONSTANT } from './../constants';
 export class ErrorHandlerInterceptor implements HttpInterceptor {
   constructor(
     private router: Router,
-    private localStorageService: LocalStorageService,
     private utilService: UtilService,
     private errorMessageService: ErrorMessageService
   ) { }
@@ -41,13 +39,13 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
 
     if (response.status === 401) {
-      const savedCredentials = this.localStorageService.getItem(CONSTANT.credentialsKey);
+      const savedCredentials = localStorage.getItem(CONSTANT.credentialsKey);
       if (savedCredentials) {
         const local = _.cloneDeep(CONSTANT);
         for (const key in local) {
           if (local.hasOwnProperty(key)) {
             const element = local[key];
-            this.localStorageService.clearItem(element);
+            localStorage.clearItem(element);
           }
         }
         window.location.reload();

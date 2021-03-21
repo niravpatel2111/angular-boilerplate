@@ -1,5 +1,5 @@
 export const CONSTANT = {
-  credentialsKey: 'Chrome_moralMind_credentials',
+  credentialsKey: 'angular_boilerplate_credentials',
 }
 
 export const ERROR_OBJECTS: Object = {

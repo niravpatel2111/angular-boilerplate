@@ -1,8 +1,6 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { EventEmitter, Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from '../local-storage.service';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 export function customMinMax(min: number, max: number, key: string): ValidatorFn {
@@ -22,7 +20,7 @@ export class UtilService {
   private _missedError: string = '';
   public missedErrors$ = new EventEmitter<string>();
 
-  constructor(private localStorage: LocalStorageService,
+  constructor(
     private router: Router,
     private route: ActivatedRoute,
   ) { }
@@ -140,82 +138,10 @@ export class UtilService {
     }, obj || self);
   }
 
-  get getOfficeData(): any | null {
-    return JSON.parse(this.localStorage.getItem('currentOffice'))
-  }
-
-  get getLocationData(): any | null {
-    return JSON.parse(this.localStorage.getItem('currentLocation'))
-  }
-
-  addTitle() {
-    let officeObj = JSON.parse(this.localStorage.getItem('currentOffice'))
-    let locationObj = JSON.parse(this.localStorage.getItem('currentLocation'))
-    return `${(officeObj) ? officeObj.officeName : ''}-${(locationObj) ? locationObj.name : ''}`;
-  }
-
   get(obj: any, key: any): any {
     return key.split('.').reduce((o: any, x: any) => {
       return o === undefined || o === null ? o : o[x];
     }, obj);
-  }
-
-  // showNotification(config: any) {
-  //   const allType = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
-  //   this.notification = $.notify({
-  //     // title: config.error ? config.error : 'Bad Request',
-  //     title: '',
-  //     message: config.message ? config.message : 'Something went wrong',
-  //   }, {
-  //       type: config.type ? config.type : allType[3],
-  //       timer: config.timer ? config.timer : 1000,
-  //       placement: {
-  //         from: 'top',
-  //         align: 'center'
-  //       },
-  //       template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0} alert-with-icon" role="alert">' +
-  //         '<button mat-raised-button type="button" aria-hidden="true" class="close" data-notify="dismiss"> <i class="material-icons">close</i></button>' +
-  //         '<i class="material-icons" data-notify="icon">report_problem</i> ' +
-  //         '<div class="mb-2" data-notify="title"><strong>{1}</strong></div> ' +
-  //         '<span data-notify="message">{2}</span>' +
-  //         '<div class="progress" data-notify="progressbar">' +
-  //         '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-  //         '</div>' +
-  //         '<a href="{3}" target="{4}" data-notify="url"></a>' +
-  //         '</div>'
-  //     });
-  // }
-
-  // showSuccessMessage(meesage: any) {
-  //   const allType = ['', 'info', 'success', 'warning', 'danger', 'rose', 'primary'];
-  //   this.notification = $.notify({
-  //     title: 'Success',
-  //     message: meesage ? meesage : 'Something went wrong',
-  //   }, {
-  //       type: allType[2],
-  //       timer: 1000,
-  //       placement: {
-  //         from: 'top',
-  //         align: 'center'
-  //       },
-  //       template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0} alert-with-icon" role="alert">' +
-  //         '<button mat-raised-button type="button" aria-hidden="true" class="close" data-notify="dismiss"> <i class="material-icons">close</i></button>' +
-  //         '<i class="material-icons" data-notify="icon">done</i> ' +
-  //         '<div class="mb-2" data-notify="title"><strong>{1}</strong></div> ' +
-  //         '<span data-notify="message">{2}</span>' +
-  //         '<div class="progress" data-notify="progressbar">' +
-  //         '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-  //         '</div>' +
-  //         '<a href="{3}" target="{4}" data-notify="url"></a>' +
-  //         '</div>'
-  //     });
-  // }
-
-  killNotification() {
-    if (this.notification) {
-      this.notification.close();
-      this.notification = null;
-    }
   }
 
   uploadDocFormatCheck(type) {
@@ -302,85 +228,6 @@ export class UtilService {
   public clearMissedError() {
     this._missedError = '';
     this.missedErrors$.emit(this._missedError);
-  }
-
-  locationUserRedirect(officeData) {
-    let currentOffice: any = {
-      address1: "",
-      address2: "",
-      billingInfo: [],
-      city: "",
-      createDate: null,
-      createdAt: "",
-      documents: [],
-      email: "",
-      firstName: "",
-      isActive: false,
-      isAdmin: false,
-      lastName: "",
-      lat: null,
-      long: null,
-      mobile: "",
-      notes: "",
-      officeName: "",
-      phone: "",
-      state: "",
-      updatedAt: "",
-      website: "",
-      zip: "",
-      _id: ""
-    }
-    let currentLocation: any = {
-      address1: "",
-      address2: "",
-      addressCity: "",
-      addressState: "",
-      addressZip: "",
-      isActive: false,
-      name: "",
-      officeId: "",
-      slug: "",
-      _id: "",
-    };
-    if (officeData && officeData.length === 1) {
-      currentOffice._id = officeData[0].officeID;
-      currentOffice.officeName = officeData[0].officeName;
-      currentLocation._id = officeData[0].locationID;
-      currentLocation.name = officeData[0].locationName;
-      this.localStorage.setItem('currentLocation', JSON.stringify(currentLocation));
-      this.localStorage.setItem('currentOffice', JSON.stringify(currentOffice));
-      this.router.navigate([`/office/${officeData[0].officeID}/${officeData[0].locationID}/caregiver`], {
-        replaceUrl: true
-      });
-    } else if (officeData && officeData.length > 1) {
-      const uniqOfficeId = Array.from(new Set(officeData.map(s => s.officeID)));
-      if (uniqOfficeId && uniqOfficeId.length === 1) {
-        const newOfficeArr = officeData.filter(office => office.officeID === uniqOfficeId[0])
-        const uniqLocationId = Array.from(new Set(newOfficeArr.map(s => s.locationID)));
-        if (uniqLocationId && uniqLocationId.length === 1) {
-          currentOffice._id = officeData[0].officeID;
-          currentOffice.officeName = officeData[0].officeName;
-          currentLocation._id = officeData[0].locationID;
-          currentLocation.name = officeData[0].locationName;
-          this.localStorage.setItem('currentLocation', JSON.stringify(currentLocation));
-          this.localStorage.setItem('currentOffice', JSON.stringify(currentOffice));
-          this.router.navigate([`/office/${officeData[0].officeID}/${officeData[0].locationID}/caregiver`], {
-            replaceUrl: true
-          });
-        } else if (uniqLocationId && uniqLocationId.length > 1) {
-          currentOffice._id = officeData[0].officeID;
-          currentOffice.officeName = officeData[0].officeName;
-          this.localStorage.setItem('currentOffice', JSON.stringify(currentOffice));
-          this.router.navigate([`/office/${officeData[0].officeID}/location`], {
-            replaceUrl: true
-          });
-        }
-      } else if (uniqOfficeId && uniqOfficeId.length > 1) {
-        this.router.navigate([`/office/list`], {
-          replaceUrl: true
-        });
-      }
-    }
   }
 
   checkBothPasswords(passwordKey: string, passwordConfirmationKey: string) {
