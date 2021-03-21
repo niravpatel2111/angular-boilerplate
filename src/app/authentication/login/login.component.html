@@ -1,0 +1,23 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" novalidate>
+    <div class="form-container">
+      <app-missed-error></app-missed-error>
+      <div class="form-group">
+        <label class="field-label">Email</label>
+        <app-form-error-wrapper [control]="loginForm.controls['email']" [controlName]="'Email'"
+          [apiErrorType]="'email'">
+          <input type="text" formControlName="email" placeholder="Email" />
+        </app-form-error-wrapper>
+      </div>
+      <div class="form-group">
+        <label class="field-label">Password</label>
+        <app-form-error-wrapper [control]="loginForm.controls['password']" [controlName]="'Password'"
+          [apiErrorType]="'password'">
+          <input type="password" formControlName="password" placeholder="Password" />
+        </app-form-error-wrapper>
+      </div>
+    </div>
+    <button (click)="checkForPermission()" [disabled]="loginForm.invalid || isLoading"
+      class="btn btn-center login-btn">Login</button>
+  </form>
+</div>
