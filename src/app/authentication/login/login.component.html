@@ -17,7 +17,7 @@
         </app-form-error-wrapper>
       </div>
     </div>
-    <button (click)="checkForPermission()" [disabled]="loginForm.invalid || isLoading"
+    <button (click)="loginSubmit()" [disabled]="loginForm.invalid || isLoading"
       class="btn btn-center login-btn">Login</button>
   </form>
 </div>

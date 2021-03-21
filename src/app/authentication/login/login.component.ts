@@ -32,22 +32,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async checkForPermission() {
-    await this.permissionCheck()
-    this.loginSubmit();
-  }
-
-  permissionCheck() {
-    return new Promise(resolve => {
-      chrome.permissions.request({
-        permissions: ['tabs'],
-        origins: ['https://answers.yahoo.com/', 'http://localhost:4200/seed-network']
-      }, (granted) => {
-        resolve(granted)
-      });
-    })
-  }
-
   createForm() {
     this.loginForm = this.formBuilder.group({
       email: [null, [Validators.required, Validators.email]],
